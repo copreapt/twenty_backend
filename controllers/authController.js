@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require('../errors');
-const jwt = require("jsonwebtoken");
+const {attachCookiesToResponse, createTokenUser} = require('../utils')
 
 
 
@@ -13,10 +13,9 @@ const register = async (req, res) => {
     throw new CustomError.BadRequestError('Email already exists');
   }
   const user = await User.create({email, fullName, username, password});
-  const token = jwt.sign({user}, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
-   });
-  res.status(StatusCodes.CREATED).json({msg:'Success! Please check your email to verify the account', token});
+  const tokenUser = createTokenUser(user);
+  attachCookiesToResponse({res, user: tokenUser});
+  res.status(StatusCodes.CREATED).json({msg:'Success! Please check your email to verify the account', user:tokenUser});
 };
 
 const verifyEmail = async (req, res) => {
@@ -36,10 +35,9 @@ if(!user){
 if(!isPasswordCorrect){
   throw new CustomError.UnauthenticatedError('Invalid Credentials');
 }
-  const token =  jwt.sign({user}, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
-  });
-  res.status(StatusCodes.OK).json({msg:`Welcome ${user.username}`,token});
+ const tokenUser = createTokenUser(user);
+ attachCookiesToResponse({res, user: tokenUser});
+  res.status(StatusCodes.OK).json({msg:`Welcome ${user.username}`, tokenUser});
 };
 
 const logout = async (req, res) => {
