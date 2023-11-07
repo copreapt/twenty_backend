@@ -1,31 +1,40 @@
-const CustomError = require('../errors');
-const {isTokenValid} = require('../utils');
+const CustomError = require("../errors");
+const { isTokenValid } = require("../utils");
+const Token = require("../models/Token");
+const { attachCookiesToResponse } = require("../utils");
 
 
-const authenticateUser = async (req,res,next) =>{
-    let token;
-    // check header
-    const authHeader = req.headers.authorization;
-    if( authHeader && authHeader.startsWith('Bearer')){
-        token = authHeader.split('')[1];
-}
-    // check cookies 
-    else if(req.cookies.token){
-        token = req.cookies.token;
+const authenticateUser = async (req, res, next) => {
+  const { refreshToken, accessToken } = req.signedCookies;
+
+  try {
+    if (accessToken) {
+      const payload = isTokenValid(accessToken);
+      req.user = payload.user;
+      return next();
     }
-    if(!token){
-        throw new CustomError.UnauthenticatedError('Authentication invalid');
+    const payload = isTokenValid(refreshToken);
+
+    const existingToken = await Token.findOne({
+      user: payload.user.userId,
+      refreshToken: payload.refreshToken,
+    });
+
+    if (!existingToken || !existingToken?.isValid) {
+      throw new CustomError.UnauthenticatedError("Authentication Invalid");
     }
-    try {
-        const payload = isTokenValid(token);
-        // Attach the user and his permissions to the req object
-        req.user =  {
-            userId: payload.user.userId,
-        };
-        next();
-    } catch (error) {
-        throw new CustomError.UnauthenticatedError('Authentication invalid');
-    };
+
+    attachCookiesToResponse({
+      res,
+      user: payload.user,
+      refreshToken: existingToken.refreshToken,
+    });
+
+    req.user = payload.user;
+    next();
+  } catch (error) {
+    throw new CustomError.UnauthenticatedError("Authentication Invalid");
+  }
 };
 
 module.exports = authenticateUser;

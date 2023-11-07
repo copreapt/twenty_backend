@@ -3,33 +3,38 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        unique: true,
-        required: [true, 'Please provide email'],
-        validate: {
-            validator: validator.isEmail,
-            message: 'Please provide valid email',
-        },
+  email: {
+    type: String,
+    unique: true,
+    required: [true, "Please provide email"],
+    validate: {
+      validator: validator.isEmail,
+      message: "Please provide valid email",
     },
-    fullName: {
-        type: String,
-        required: [true, 'Please provide full name'],
-        minlength: 3,
-        maxlength: 50,
-    },
-    username: {
-        type: String,
-        required: [true, 'Please provide username'],
-        minlength: 3,
-        maxlength: 30,
-    },
-    password: {
-        type: String,
-        required: [true, 'Please provide password'],
-        minlength: 6,
-    },
-})
+  },
+  fullName: {
+    type: String,
+    required: [true, "Please provide full name"],
+    minlength: 3,
+    maxlength: 50,
+  },
+  username: {
+    type: String,
+    required: [true, "Please provide username"],
+    minlength: 3,
+    maxlength: 30,
+  },
+  password: {
+    type: String,
+    required: [true, "Please provide password"],
+    minlength: 6,
+  },
+  verificationToken: String,
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 
 UserSchema.pre('save', async function () {
