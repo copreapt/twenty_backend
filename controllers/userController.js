@@ -47,8 +47,7 @@ const updateUserPassword = async (req, res) => {
   if (!oldPassword || !newPassword) {
     throw new CustomError.BadRequestError("Please provide both values");
   }
-  const user = await User.findOne({ _id:"654a12c20784034bdea58a63",
- });
+  const user = await User.findOne({ _id: req.user.userId });
 
   const isPasswordCorrect = await user.comparePassword(oldPassword);
   if (!isPasswordCorrect) {
