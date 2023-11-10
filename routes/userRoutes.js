@@ -13,7 +13,7 @@ const {
 
 router
   .route("/")
-  .get(authenticateUser, getAllUsers);
+  .get(authenticateUser,getAllUsers);
 
 router.route("/showMe").get(authenticateUser, showCurrentUser);
 router.route("/updateUser").patch(authenticateUser, updateUser);
