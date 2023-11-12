@@ -1,9 +1,8 @@
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
-const { attachCookiesToResponse, createTokenUser } = require("../utils");
+const { attachCookiesToResponse, createTokenUser, sendVerificationEmail } = require("../utils");
 const crypto = require('crypto');
-const sendEmail = require('../utils/sendEmail');
 
 const register = async (req, res) => {
   const { email, fullName, password, username } = req.body;
@@ -19,7 +18,11 @@ const register = async (req, res) => {
 
   const user = await User.create({ fullName, email, password, username, verificationToken });
 
-  await sendEmail();
+  // origin is the target url, where the user will navigate once the link in the email is clicked 
+
+  const origin = 'http://localhost:5173';
+
+  await sendVerificationEmail({fullName: user.fullName, email: user.email, verificationToken: user.verificationToken, origin});
 
 // send verification token back only while testing in postman!!!
 
