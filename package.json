@@ -36,5 +36,6 @@
   },
   "engines": {
     "node": "18.x"
-  }
+  },
+  "proxy": "https://twenty-media.netlify.app"
 }
