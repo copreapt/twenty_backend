@@ -21,7 +21,7 @@ const register = async (req, res) => {
 
   // origin is the target url, where the user will navigate once the link in the email is clicked 
 
-  const origin = 'http://localhost:5173';
+  const origin = "https://twenty-media.netlify.app";
 
   await sendVerificationEmail({fullName: user.fullName, email: user.email, verificationToken: user.verificationToken, origin});
 
