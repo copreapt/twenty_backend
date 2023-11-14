@@ -1,7 +1,8 @@
 const User = require("../models/User");
+const Token = require('../models/Token');
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
-const { attachCookiesToResponse, createTokenUser, sendVerificationEmail } = require("../utils");
+const { attachCookiesToResponse, createTokenUser, sendVerificationEmail, sendResetPasswordEmail, createHash } = require("../utils");
 const crypto = require('crypto');
 
 const register = async (req, res) => {
@@ -71,17 +72,110 @@ const login = async (req, res) => {
   }
 
   const tokenUser = createTokenUser(user);
-  attachCookiesToResponse({ res, user: tokenUser });
 
+  // create refresh token;
+  let refreshToken = '';
+
+  // check for existing token
+
+const existingToken = await Token.findOne({user:user._id});
+
+if(existingToken){
+// check if isValid is true, if i want to logout a user, I'll just set in database isValid to false
+  const {isValid} = existingToken
+  if(!isValid) {
+    throw new CustomError.UnauthenticatedError('Invalid Credentials');
+  }
+// is there is already an existing token, instead of creating a new one, we use the one from database
+  refreshToken = existingToken.refreshToken
+// we don't need to check for userAgent, ip or useToken, because we already have that in the database so we just attach the cookies
+  attachCookiesToResponse({ res, user: tokenUser, refreshToken });
   res.status(StatusCodes.OK).json({ user: tokenUser });
+
+// return so js doesn't keep reading the rest of the code
+  return;
+}
+
+// assuming there is no refresh token yet, we create the token
+refreshToken = crypto.randomBytes(40).toString('hex')
+const userAgent = req.headers['user-agent']
+const ip = req.ip
+// in userToken we pass the values needed to create the Token (all values from Token model)
+const userToken = {refreshToken,ip,userAgent,user:user._id}
+
+await Token.create(userToken);
+
+
+
+
+  attachCookiesToResponse({ res, user: tokenUser, refreshToken });
+
+  res.status(StatusCodes.OK).json({ user: tokenUser});
 };
 
 const logout = async (req, res) => {
-  res.cookie("token", "logout", {
+
+  await Token.findOneAndDelete({user:req.user.userId})
+
+  res.cookie("accessToken", "logout", {
     httpOnly: true,
-    expires: new Date(Date.now() + 1000),
+    expires: new Date(Date.now()),
   });
+
+  res.cookie("refreshToken", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+
   res.status(StatusCodes.OK).json({ msg: "user logged out!" });
+};
+
+const forgotPassword = async (req,res) => {
+  const {email} = req.body;
+  // we won't check if the email exists in the database and send success response regardless, so whoever is trying to reset the password won't know if the email exists or not
+  if (!email) {
+    throw new CustomError.BadRequestError("Please provide valid email");
+  }
+
+  const user = await User.findOne({email});
+
+  if(user){
+    const passwordToken = crypto.randomBytes(70).toString('hex');
+    // send email
+    const origin = "http://localhost:5173";
+    await sendResetPasswordEmail({fullName:user.fullName, email:user.email,token:passwordToken, origin})
+
+    const tenMinutes = 1000 * 60 * 10;
+    const passwordTokenExpirationDate = new Date(Date.now() + tenMinutes);
+
+    user.passwordToken = createHash(passwordToken);
+    user.passwordTokenExpirationDate = passwordTokenExpirationDate;
+    await user.save();
+
+  }
+  res.status(StatusCodes.OK).json({msg:'Please check your email for reset password link'});
+}
+
+const resetPassword = async (req, res) => {
+  const {token,email,password} = req.body;
+  if(!token || !email || !password){
+    throw new CustomError.BadRequestError('Please provide all values');
+  }
+  const user = await User.findOne({email});
+
+  if(user){
+    const currentDate = new Date()
+    if(user.passwordToken === createHash(token) && user.passwordTokenExpirationDate > currentDate){
+      user.password = password;
+      user.passwordToken = null;
+      user.passwordTokenExpirationDate = null;
+      await user.save();
+    }
+  }
+
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: "Success! Redirecting to login page" });
 };
 
 module.exports = {
@@ -89,4 +183,6 @@ module.exports = {
   login,
   logout,
   verifyEmail,
+  forgotPassword,
+  resetPassword,
 };
