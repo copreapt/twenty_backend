@@ -127,7 +127,7 @@ const logout = async (req, res) => {
     expires: new Date(Date.now()),
   });
 
-  res.status(StatusCodes.OK).json({ msg: "user logged out!" });
+  res.status(StatusCodes.OK).json({ msg: "Logged out" });
 };
 
 const forgotPassword = async (req,res) => {
