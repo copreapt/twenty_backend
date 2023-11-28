@@ -18,8 +18,9 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
   res.cookie("accessToken", accessTokenJWT, {
     httpOnly: true,
     expires: new Date(Date.now() + oneDay),
-    sameSite: 'none',
+    sameSite: "none",
     secure: true,
+    // secure: process.env.NODE_ENV === "production",
     signed: true,
     domain: "twenty-media.netlify.app",
   });
@@ -27,8 +28,9 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
   res.cookie("refreshToken", refreshTokenJWT, {
     httpOnly: true,
     expires: new Date(Date.now() + longerExp),
-    sameSite: 'none',
+    sameSite: "none",
     secure: true,
+    // secure: process.env.NODE_ENV === "production",
     signed: true,
     domain: "twenty-media.netlify.app",
   });

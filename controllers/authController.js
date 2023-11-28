@@ -22,12 +22,13 @@ const register = async (req, res) => {
   // origin is the target url, where the user will navigate once the link in the email is clicked 
 
   const origin = "https://twenty-media.netlify.app";
+  // const origin = "http://localhost:5173";
 
   await sendVerificationEmail({fullName: user.fullName, email: user.email, verificationToken: user.verificationToken, origin});
 
 // send verification token back only while testing in postman!!!
 
-  res.status(StatusCodes.CREATED).json({ msg:'Success! Please check your email to verify the account' });
+  res.status(StatusCodes.CREATED).json({ msg:'Account Created! Please check your email to verify the account' });
 };
 
 
@@ -143,6 +144,7 @@ const forgotPassword = async (req,res) => {
     const passwordToken = crypto.randomBytes(70).toString('hex');
     // send email
     const origin = "https://twenty-media.netlify.app";
+    // const origin = "http://localhost:5173";
     await sendResetPasswordEmail({fullName:user.fullName, email:user.email,token:passwordToken, origin})
 
     const tenMinutes = 1000 * 60 * 10;
