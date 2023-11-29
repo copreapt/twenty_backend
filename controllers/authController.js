@@ -120,11 +120,13 @@ const logout = async (req, res) => {
 
   res.cookie("accessToken", "logout", {
     httpOnly: true,
+    domain: "twenty-media.netlify.app",
     expires: new Date(Date.now()),
   });
 
   res.cookie("refreshToken", "logout", {
     httpOnly: true,
+    domain: "twenty-media.netlify.app",
     expires: new Date(Date.now()),
   });
 
