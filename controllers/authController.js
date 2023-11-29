@@ -116,7 +116,7 @@ await Token.create(userToken);
 
 const logout = async (req, res) => {
 
-  await Token.findOneAndDelete({user:req.user.userId})
+  // await Token.findOneAndDelete({user:req.user.userId})
 
   res.cookie("accessToken", "logout", {
     httpOnly: true,
