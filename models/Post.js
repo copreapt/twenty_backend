@@ -8,6 +8,16 @@ const PostSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    name: {
+      type: String,
+    },
+    location: {
+      type: String,
+      default: 'Somewhere',
+    },
+    profilePicture: {
+      type: String,
+    },
     video: {
       type: String,
     },

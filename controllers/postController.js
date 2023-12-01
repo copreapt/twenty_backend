@@ -7,8 +7,8 @@ const fs = require("fs");
 
 
 const createPost = async (req, res) => {
-    req.body.user = req.user.userId;
     // req.body.user = req.user.userId;
+    req.body.user = req.user.userId;
     const post = await Post.create(req.body);
     res.status(StatusCodes.CREATED).json({post});
 };

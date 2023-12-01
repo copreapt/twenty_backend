@@ -22,7 +22,9 @@ const getSingleUser = async (req, res) => {
 };
 
 const showCurrentUser = async (req, res) => {
-  res.status(StatusCodes.OK).json({ user: req.user });
+  const currentUserId = req.user.userId;
+  const user = await User.findOne({_id: currentUserId}).select("-password");
+  res.status(StatusCodes.OK).json({ user});
 };
 // update user with user.save()
 const updateUser = async (req, res) => {

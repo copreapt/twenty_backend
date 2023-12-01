@@ -41,6 +41,11 @@ const UserSchema = new mongoose.Schema({
   passwordTokenExpirationDate: {
     type: Date,
   },
+  profilePicture: {
+    type: String,
+    default:
+      "https://res.cloudinary.com/drprikq7j/image/upload/v1700931427/twenty/tmp-1-1700931426678_vjk5dz.jpg",
+  },
 });
 
 
