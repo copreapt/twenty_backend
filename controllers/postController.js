@@ -14,7 +14,7 @@ const createPost = async (req, res) => {
 };
 
 const getAllPosts= async (req, res) => {
-    const posts = await Post.find({}).sort({createdAt:'desc'}).select('-_id').select('-user').select('-id');
+    const posts = await Post.find({}).sort({createdAt:'desc'}).select('-user');
     res.status(StatusCodes.OK).json({posts});
 };
 
