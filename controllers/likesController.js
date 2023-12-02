@@ -24,7 +24,7 @@ const createLike = async (req,res) => {
 
     req.body.user = req.user.userId;
     const like = await Likes.create(req.body);  
-    res.status(StatusCodes.CREATED).json({});
+    res.status(StatusCodes.CREATED).json({msg: "Success"});
 };
 
 const getLikes = async (req,res) => {
