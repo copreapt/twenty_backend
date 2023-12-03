@@ -10,7 +10,6 @@ const createLike = async (req,res) => {
     if(!isValidPost){
         throw new CustomError.NotFoundError(`No post with id: ${postId}`);
     }
-
     const alreadySubmitted = await Likes.findOne({
       post: postId,
       user: req.user.userId,

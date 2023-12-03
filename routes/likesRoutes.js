@@ -9,7 +9,6 @@ const {
 } = require("../controllers/likesController");
 
 router.route("/").post(authenticateUser, createLike).get(getLikes);
-// router.route("/").post(createLike).get(getLikes);
 
 router
   .route("/:id")

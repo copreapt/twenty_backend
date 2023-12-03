@@ -10,7 +10,6 @@ const {
 } = require("../controllers/commentsController");
 
 router.route("/").post(authenticateUser, createComment).get(getComments);
-// router.route("/").post(createComment).get(getComments);
 
 router
   .route("/:id")

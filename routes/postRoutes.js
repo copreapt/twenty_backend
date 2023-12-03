@@ -18,12 +18,10 @@ router
   .route("/")
   .post(authenticateUser, createPost)
   .get(getAllPosts);
-// router.route("/").post(createPost).get(getAllPosts);
 
 router
   .route("/uploadImage")
   .post(authenticateUser, uploadImage)
-// router.route("/uploadImage").post(uploadImage);
 
 router.route("/uploadVideo")
   .post(authenticateUser, uploadVideo);
