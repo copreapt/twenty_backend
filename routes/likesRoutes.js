@@ -8,7 +8,7 @@ const {
   deleteLike,
 } = require("../controllers/likesController");
 
-router.route("/").post(authenticateUser, createLike).get(getLikes);
+router.route("/").post(authenticateUser, createLike).get(authenticateUser,getLikes);
 
 router
   .route("/:id")
