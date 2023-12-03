@@ -14,12 +14,14 @@ const createLike = async (req,res) => {
       post: postId,
       user: req.user.userId,
     });
-
+// if like already exists, next time user presses on like button, we remove the like
     if (alreadySubmitted) {
-      throw new CustomError.BadRequestError(
-        "Already submitted like for this post"
-      );
-    }
+      const deleteLike = await Likes.findOneAndDelete({
+        post: postId,
+        user: req.user.userId,
+      })
+      return res.status(StatusCodes.OK).json({ msg: "Like deleted" });
+    };
 
     req.body.user = req.user.userId;
     const like = await Likes.create(req.body);  
