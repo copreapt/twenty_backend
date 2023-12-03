@@ -20,7 +20,7 @@ const createLike = async (req,res) => {
         post: postId,
         user: req.user.userId,
       })
-      return res.status(StatusCodes.OK).json({ msg: "Like deleted" });
+      return res.status(StatusCodes.OK).json({ msg: "Success! Like deleted" });
     };
 
     req.body.user = req.user.userId;
