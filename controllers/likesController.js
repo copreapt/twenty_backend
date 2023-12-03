@@ -29,11 +29,15 @@ const createLike = async (req,res) => {
 };
 
 const getLikes = async (req,res) => {
-    const userId = req.user.userId
-    const currentUserLikes = await Likes.find({user: userId});
     const allLikes = await Likes.find({});
-    res.status(StatusCodes.OK).json({currentUserLikes, allLikes});
+    res.status(StatusCodes.OK).json({ allLikes });
 };
+
+const getCurrentUserLikes = async(req,res) => {
+  const userId = req.user.userId;
+  const currentUserLikes = await Likes.find({ user: userId });
+  res.status(StatusCodes.OK).json({ currentUserLikes });
+}
 
 const deleteLike = async(req,res) => {
     const {id: likeId} = req.params;
@@ -49,6 +53,7 @@ const deleteLike = async(req,res) => {
 module.exports = {
     createLike,
     getLikes,
+    getCurrentUserLikes,
     deleteLike,
 }
 
