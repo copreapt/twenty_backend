@@ -29,12 +29,10 @@ const createLike = async (req,res) => {
 };
 
 const getLikes = async (req,res) => {
-    const {post: postId} = req.body
-    const likes = await Likes.find({post: postId});
-    if (!likes) {
-      throw new CustomError.NotFoundError(`There are no likes for post with id ${postId}`);
-    }
-    res.status(StatusCodes.OK).json({likes});
+    const userId = req.user.userId
+    const currentUserLikes = await Likes.find({user: userId});
+    const allLikes = await Likes.find({});
+    res.status(StatusCodes.OK).json({currentUserLikes, allLikes});
 };
 
 const deleteLike = async(req,res) => {
