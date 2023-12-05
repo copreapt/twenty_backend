@@ -30,7 +30,7 @@ const createLike = async (req,res) => {
 
 const getLikes = async (req,res) => {
     const allLikes = await Likes.find({});
-    res.status(StatusCodes.OK).json({ allLikes, count: allLikes.length });
+    res.status(StatusCodes.OK).json({ allLikes });
 };
 
 const getCurrentUserLikes = async(req,res) => {
