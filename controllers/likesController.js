@@ -39,6 +39,12 @@ const getCurrentUserLikes = async(req,res) => {
   res.status(StatusCodes.OK).json({ currentUserLikes });
 }
 
+const getCurrentPostLikes = async(req,res) => {
+  const postId = req.body;
+  const currentPostLikes = await Likes.find({post: postId});
+  res.status(StatusCodes.OK).json({currentPostLikes});
+}
+
 const deleteLike = async(req,res) => {
     const {id: likeId} = req.params;
     const like = await Likes.findOneAndDelete({_id: likeId});
@@ -54,6 +60,7 @@ module.exports = {
     createLike,
     getLikes,
     getCurrentUserLikes,
+    getCurrentPostLikes,
     deleteLike,
 }
 
