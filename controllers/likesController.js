@@ -40,8 +40,11 @@ const getCurrentUserLikes = async(req,res) => {
 }
 
 const getCurrentPostLikes = async(req,res) => {
-  const postId = req.body;
+  const {_id: postId} = req.body;
   const currentPostLikes = await Likes.find({post: postId});
+  if(!currentPostLikes){
+    return res.status(StatusCodes.OK).json({msg: "No likes yet for this post"});
+  }
   res.status(StatusCodes.OK).json({currentPostLikes});
 }
 
