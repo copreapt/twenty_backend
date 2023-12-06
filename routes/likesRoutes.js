@@ -12,7 +12,7 @@ const {
 
 router.route("/").post(authenticateUser, createLike).get(getLikes);
 router.route("/currentUserLikes").get(authenticateUser, getCurrentUserLikes);
-router.route("/currentPostLikes").get(authenticateUser, getCurrentPostLikes);
+router.route("/currentPostLikes").post(authenticateUser, getCurrentPostLikes);
 router
   .route("/:id")
   .delete(authenticateUser, deleteLike);
