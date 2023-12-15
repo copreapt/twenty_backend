@@ -9,7 +9,8 @@ const {
   deleteComment,
 } = require("../controllers/commentsController");
 
-router.route("/").post(authenticateUser, createComment).post(getComments);
+router.route("/").post(authenticateUser, createComment)
+router.route("/getCurrentPostComments").post(getComments);
 
 router
   .route("/:id")
