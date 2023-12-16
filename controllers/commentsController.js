@@ -20,6 +20,12 @@ const getComments = async (req, res) => {
   res.status(StatusCodes.OK).json({ comments });
 };
 
+const getLastComment = async (req,res) => {
+  const {post: postId} = req.body;
+  const lastComment = await Comments.find({post: postId}).sort({_id: -1}).limit(1);
+  res.status(StatusCodes.OK).json({lastComment});
+}
+
 const updateComment = async (req,res) => {
     const { id: commentId } = req.params;
 
@@ -50,6 +56,7 @@ const deleteComment = async (req, res) => {
 module.exports = {
   createComment,
   getComments,
+  getLastComment,
   updateComment,
   deleteComment,
 };
