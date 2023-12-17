@@ -11,7 +11,10 @@ const createComment = async (req, res) => {
    }
    req.body.user = req.user.userId;
    const comment = await Comments.create(req.body);
-   res.status(StatusCodes.CREATED).json({ comment });
+   if(comment){
+    const allComments = await Comments.find({post: postId})
+    return res.status(StatusCodes.CREATED).json({allComments});
+   }
 };
 
 const getComments = async (req, res) => {
