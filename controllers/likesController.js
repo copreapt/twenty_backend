@@ -20,19 +20,19 @@ const createLike = async (req,res) => {
         post: postId,
         user: req.user.userId,
       })
-        const currentPostLikes = await Likes.find({ post: postId });
+        const allLikes = await Likes.find({});
       return  res
           .status(StatusCodes.CREATED)
-          .json({ msg: "Success", currentPostLikes });
+          .json({ msg: "Success", allLikes });
     };
 
     req.body.user = req.user.userId;
     const like = await Likes.create(req.body);
     if(like){
-      const currentPostLikes = await Likes.find({post: postId})
+      const allLikes = await Likes.find({})
      return res
         .status(StatusCodes.CREATED)
-        .json({ msg: "Success", currentPostLikes });
+        .json({ msg: "Success", allLikes });
     }
 };
 
