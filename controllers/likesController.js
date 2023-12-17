@@ -20,20 +20,20 @@ const createLike = async (req,res) => {
         post: postId,
         user: req.user.userId,
       })
-      if(deleteLike){
-        const numberOfLikes = await Likes.find({ post: postId });
-        res
+        const currentPostLikes = await Likes.find({ post: postId });
+      return  res
           .status(StatusCodes.CREATED)
-          .json({ msg: "Success", count: numberOfLikes.length });
-      }
+          .json({ msg: "Success", currentPostLikes });
     };
-    
+
     req.body.user = req.user.userId;
     const like = await Likes.create(req.body);
     if(like){
-      const numberOfLikes = await Likes.find({post: postId})
-      res.status(StatusCodes.CREATED).json({ msg: "Success", count: numberOfLikes.length });
-    }  
+      const currentPostLikes = await Likes.find({post: postId})
+     return res
+        .status(StatusCodes.CREATED)
+        .json({ msg: "Success", currentPostLikes });
+    }
 };
 
 const getLikes = async (req,res) => {
