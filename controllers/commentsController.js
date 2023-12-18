@@ -13,7 +13,8 @@ const createComment = async (req, res) => {
    const comment = await Comments.create(req.body);
    if(comment){
     const allComments = await Comments.find({post: postId})
-    return res.status(StatusCodes.CREATED).json({allComments});
+    const currentUserCommentsToCurrentPost = await Comments.find({ post: postId, user: req.user.userId })
+    return res.status(StatusCodes.CREATED).json({allComments, currentUserCommentsToCurrentPost});
    }
 };
 
