@@ -47,6 +47,14 @@ const updateComment = async (req,res) => {
     res.status(StatusCodes.OK).json({comment});
 }
 
+const getCurrentUserComments = async (req,res) => {
+  const currentUserId = req.user.userId;
+  const {post: postId} = req.body;
+  const currentUserComments = await Comments.find({post: postId, user: currentUserId});
+
+  res.status(StatusCodes.OK).json({currentUserComments});
+}
+
 const deleteComment = async (req, res) => {
   const { id: commentId } = req.params;
   const comment = await Comments.findOneAndDelete({ _id: commentId });
@@ -60,6 +68,7 @@ module.exports = {
   createComment,
   getComments,
   getLastComment,
+  getCurrentUserComments,
   updateComment,
   deleteComment,
 };

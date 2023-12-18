@@ -8,11 +8,13 @@ const {
   updateComment,
   deleteComment,
   getLastComment,
+  getCurrentUserComments,
 } = require("../controllers/commentsController");
 
 router.route("/").post(authenticateUser, createComment)
 router.route("/getCurrentPostComments").post(getComments);
 router.route("/getLastComment").post(getLastComment);
+router.route("/getCurrentUserComments").post(authenticateUser,getCurrentUserComments);
 
 router
   .route("/:id")
