@@ -58,11 +58,13 @@ const getCurrentUserComments = async (req,res) => {
 
 const deleteComment = async (req, res) => {
   const { id: commentId } = req.params;
+  const {post: postId} = req.body;
   const comment = await Comments.findOneAndDelete({ _id: commentId });
   if (!comment) {
     throw new CustomError.NotFoundError(`No comment with id ${commentId}`);
   }
-  res.status(StatusCodes.OK).json({ msg: "Success! Comment removed" });
+  const allComments = await Comments.find({ post: postId });
+  res.status(StatusCodes.OK).json({ msg: "Success! Comment removed", allComments });
 };
 
 module.exports = {
