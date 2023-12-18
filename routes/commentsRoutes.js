@@ -19,6 +19,6 @@ router.route("/getCurrentUserComments").post(authenticateUser,getCurrentUserComm
 router
   .route("/:id")
   .patch(authenticateUser, updateComment)
-  .post(authenticateUser, deleteComment);
+  .delete(authenticateUser, deleteComment);
 
 module.exports = router;
