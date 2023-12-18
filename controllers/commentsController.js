@@ -64,10 +64,10 @@ const deleteComment = async (req, res) => {
     post: postId,
     user: req.user.userId,
   });
+  const allComments = await Comments.find({ post: postId });
   if (!comment) {
     throw new CustomError.NotFoundError(`No comment with id ${commentId}`);
   }
-  const allComments = await Comments.find({ post: postId });
   res.status(StatusCodes.OK).json({ msg: "Success! Comment removed", allComments, currentUserComments });
 };
 
