@@ -22,7 +22,7 @@ const getComments = async (req, res) => {
   const { post: postId } = req.body;
   const comments = await Comments.find({ post: postId });
   const allComments = await Comments.find({});
-  res.status(StatusCodes.OK).json({ comments });
+  res.status(StatusCodes.OK).json({ comments, allComments });
 };
 
 const getLastComment = async (req,res) => {
