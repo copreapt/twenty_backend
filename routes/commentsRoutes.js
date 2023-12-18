@@ -17,7 +17,7 @@ router.route("/getLastComment").post(getLastComment);
 router.route("/getCurrentUserComments").post(authenticateUser,getCurrentUserComments);
 
 router
-  .route("/:id")
+  .route("/:id/:postId")
   .patch(authenticateUser, updateComment)
   .delete(authenticateUser, deleteComment);
 
