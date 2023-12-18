@@ -21,6 +21,7 @@ const createComment = async (req, res) => {
 const getComments = async (req, res) => {
   const { post: postId } = req.body;
   const comments = await Comments.find({ post: postId });
+  const allComments = await Comments.find({});
   res.status(StatusCodes.OK).json({ comments });
 };
 
