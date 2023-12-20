@@ -29,14 +29,13 @@ const showCurrentUser = async (req, res) => {
 // update user with user.save()
 const updateUser = async (req, res) => {
   const { email, fullName, username } = req.body;
-  if (!email || !fullName || !username) {
-    throw new CustomError.BadRequestError("Please provide all values");
-  }
+
   const user = await User.findOne({ _id: req.user.userId });
 
   user.email = email;
   user.fullName = fullName;
   user.username = username;
+  user.profilePicture = profilePicture;
 
   await user.save();
 
