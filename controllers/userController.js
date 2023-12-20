@@ -48,6 +48,10 @@ const updateUser = async (req, res) => {
 
   const user = await User.findOne({ _id: req.user.userId });
 
+  if(!email, !fullName, !username, !profilePicture){
+    throw CustomError.BadRequestError('Please provide all values')
+  }
+  
   user.email = email;
   user.fullName = fullName;
   user.username = username;
