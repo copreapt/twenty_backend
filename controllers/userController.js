@@ -42,25 +42,23 @@ const uploadImage = async (req, res) => {
   return res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
 };
 
-// update user with user.save()
 const updateUser = async (req, res) => {
   const { email, fullName, username, profilePicture } = req.body;
-
-  const user = await User.findOne({ _id: req.user.userId });
+  const {userId: id} = req.user.userId;
 
   if(!email, !fullName, !username, !profilePicture){
     throw CustomError.BadRequestError('Please provide all values')
   }
-  
-  user.email = email;
-  user.fullName = fullName;
-  user.username = username;
-  user.profilePicture = profilePicture;
 
-  await user.save();
+ const updatedUser = await User.findOneAndUpdate({ _id: id }, {
+  email, fullName, username, profilePicture,
+ });
 
-  const updatedUser = await User.findOne({_id: req.user.userId});
-  const tokenUser = createTokenUser(user);
+ if(!updatedUser){
+  throw CustomError.BadRequestError(`There is no user with id: ${id}`);
+ }
+
+  const tokenUser = createTokenUser(updatedUser);
   attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({user: updatedUser});
 };
