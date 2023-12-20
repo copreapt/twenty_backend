@@ -9,6 +9,7 @@ const {
   showCurrentUser,
   updateUser,
   updateUserPassword,
+  uploadImage
 } = require("../controllers/userController");
 
 router
@@ -16,7 +17,10 @@ router
   .get(authenticateUser,getAllUsers);
 
 router.route("/showMe").get(authenticateUser, showCurrentUser);
+
 router.route("/updateUser").patch(authenticateUser, updateUser);
+
+router.route("/uploadImage").post(authenticateUser, uploadImage);
 
 router.route("/updateUserPassword").patch(authenticateUser, updateUserPassword);
 

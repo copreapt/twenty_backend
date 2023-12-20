@@ -26,6 +26,19 @@ const showCurrentUser = async (req, res) => {
   const user = await User.findOne({_id: currentUserId}).select("-password");
   res.status(StatusCodes.OK).json({ user});
 };
+
+const uploadImage = async (req, res) => {
+  const result = await cloudinary.uploader.upload(
+    req.files.image.tempFilePath,
+    {
+      use_filename: true,
+      folder: "twenty",
+    }
+  );
+  fs.unlinkSync(req.files.image.tempFilePath);
+  return res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
+};
+
 // update user with user.save()
 const updateUser = async (req, res) => {
   const { email, fullName, username } = req.body;
@@ -66,4 +79,5 @@ module.exports = {
   showCurrentUser,
   updateUser,
   updateUserPassword,
+  uploadImage,
 };
