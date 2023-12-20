@@ -6,6 +6,9 @@ const {
   attachCookiesToResponse,
   checkPermissions,
 } = require("../utils");
+const path = require("path");
+const cloudinary = require("cloudinary").v2;
+const fs = require("fs");
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({ }).select("-password");
@@ -41,7 +44,7 @@ const uploadImage = async (req, res) => {
 
 // update user with user.save()
 const updateUser = async (req, res) => {
-  const { email, fullName, username } = req.body;
+  const { email, fullName, username, profilePicture } = req.body;
 
   const user = await User.findOne({ _id: req.user.userId });
 
