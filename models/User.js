@@ -2,6 +2,13 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
+
+const FriendsSchema = mongoose.Schema({
+  fullName: { type: String, required: true },
+  profilePicture: { type: String, required: true },
+  friendId: { type: String, required: true },  
+});
+
 const UserSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -46,6 +53,22 @@ const UserSchema = new mongoose.Schema({
     default:
       "https://res.cloudinary.com/drprikq7j/image/upload/v1700931427/twenty/tmp-1-1700931426678_vjk5dz.jpg",
   },
+  facebook: {
+    type: String,
+  },
+  instagram: {
+    type: String,
+  },
+  twitter: {
+    type: String,
+  },
+  job: {
+    type: String,
+  },
+  location: {
+    type: String,
+  },
+  friends: [FriendsSchema],
 });
 
 

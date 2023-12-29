@@ -9,7 +9,8 @@ const {
   showCurrentUser,
   updateUser,
   updateUserPassword,
-  uploadImage
+  uploadImage,
+  addFriend
 } = require("../controllers/userController");
 
 router
@@ -23,6 +24,8 @@ router.route("/updateUser").patch(authenticateUser, updateUser);
 router.route("/uploadImage").post(authenticateUser, uploadImage);
 
 router.route("/updateUserPassword").patch(authenticateUser, updateUserPassword);
+
+router.route("/addFriend").patch(authenticateUser, addFriend);
 
 router.route("/:id").get(authenticateUser, getSingleUser);
 

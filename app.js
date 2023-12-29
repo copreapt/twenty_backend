@@ -42,13 +42,28 @@ app.set("trust proxy", 1);
 //   })
 // );
 app.use(helmet());
+// app.use(
+//   cors({
+//     origin: "https://twenty-media.netlify.app",
+//     credentials: true,
+//   })
+// );
 app.use(
   cors({
-    origin: "https://twenty-media.netlify.app",
-    credentials: true,
+    origin: true, //included origin as true
+    credentials: true, //included credentials as true
   })
 );
-// app.use(cors());
+// app.use(function (req, res, next) {
+//   // res.header("Access-Control-Allow-Origin", "*");
+//   // res.header(
+//   //   "Access-Control-Allow-Headers",
+//   //   "Origin, X-Requested-With, Content-Type, Accept"
+//   // );
+//   // res.header("Access-Control-Allow-Credentials", true);
+//   // res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+//   next();
+// });
 app.use(xss());
 app.use(mongoSanitize());
 app.use(express.json());

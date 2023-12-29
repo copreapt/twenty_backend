@@ -1,10 +1,11 @@
 const User = require("../models/User");
+const Post = require("../models/Post");
+const Likes = require("../models/Likes");
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
 const {
   createTokenUser,
   attachCookiesToResponse,
-  checkPermissions,
 } = require("../utils");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
@@ -20,8 +21,8 @@ const getSingleUser = async (req, res) => {
   if (!user) {
     throw new CustomError.NotFoundError(`No user with id : ${req.params.id}`);
   }
-  checkPermissions(req.user, user._id);
-  res.status(StatusCodes.OK).json({ user });
+  const posts = await Post.find({user: req.params.id});
+  res.status(StatusCodes.OK).json({ user, posts });
 };
 
 const showCurrentUser = async (req, res) => {
@@ -43,24 +44,40 @@ const uploadImage = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { email, fullName, username, profilePicture } = req.body;
-  const {userId: id} = req.user.userId;
+  const { fullName, username, profilePicture, facebook, instagram, twitter, job, location} = req.body;
 
-  if(!email, !fullName, !username, !profilePicture){
-    throw CustomError.BadRequestError('Please provide all values')
+  if(!fullName, !username, !profilePicture){
+    throw new CustomError.BadRequestError('Please provide all values')
   }
 
- const updatedUser = await User.findOneAndUpdate({ _id: id }, {
-  email, fullName, username, profilePicture,
- });
+ const updatedUser = await User.findOne({ _id: req.user.userId });
 
- if(!updatedUser){
-  throw CustomError.BadRequestError(`There is no user with id: ${id}`);
- }
+ updatedUser.fullName = fullName;
+ updatedUser.username = username;
+ updatedUser.profilePicture = profilePicture;
+ updatedUser.facebook = facebook;
+ updatedUser.instagram = instagram;
+ updatedUser.twitter = twitter;
+ updatedUser.job = job;
+ updatedUser.location = location;
+
+ await updatedUser.save()
+
+//  find all the posts and comments of this user, and update full name and profile picture
+
+const updatePosts = await Post.updateMany({user: req.user.userId}, {
+  name: fullName,
+  profilePicture: profilePicture,
+});
+
+const updateLikes = await Likes.updateMany({user: req.user.userId}, {
+  name: fullName,
+  profilePicture: profilePicture,
+});
 
   const tokenUser = createTokenUser(updatedUser);
   attachCookiesToResponse({ res, user: tokenUser });
-  res.status(StatusCodes.OK).json({user: updatedUser});
+  res.status(StatusCodes.OK).json({user: updatedUser, msg:"Profile updated!"});
 };
 const updateUserPassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
@@ -79,6 +96,26 @@ const updateUserPassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "Success! Password Updated." });
 };
 
+const addFriend = async (req,res) => {
+  const { fullName, profilePicture, friendId } = req.body;
+  if(!fullName || !profilePicture || !friendId){
+    throw new CustomError.BadRequestError("Please provide all values")
+  }
+  const updatedUser = await User.findOne({_id: req.user.userId});
+  const newFriend = {
+    fullName,
+    profilePicture,
+    friendId,
+  }
+  updatedUser.friends = [...updatedUser.friends, newFriend];
+  await updatedUser.save()
+  res
+    .status(StatusCodes.OK)
+    .json({ user: updatedUser, msg: `${fullName} has been added to your friend list` });
+}
+
+
+
 module.exports = {
   getAllUsers,
   getSingleUser,
@@ -86,4 +123,5 @@ module.exports = {
   updateUser,
   updateUserPassword,
   uploadImage,
+  addFriend,
 };
