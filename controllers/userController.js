@@ -52,6 +52,7 @@ const updateUser = async (req, res) => {
 
  const updatedUser = await User.findOne({ _id: req.user.userId });
 
+
  updatedUser.fullName = fullName;
  updatedUser.username = username;
  updatedUser.profilePicture = profilePicture;
