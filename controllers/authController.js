@@ -114,19 +114,34 @@ await Token.create(userToken);
   res.status(StatusCodes.OK).json({ user: tokenUser});
 };
 
-const logout = async (req, res) => {
+const autoLogin = async (req,res) => {
+  const {accessToken} = req.signedCookies;
+  if (!accessToken || accessToken === null) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({});
+  }
+  return res.status(StatusCodes.OK).json({});
+}
 
-  await Token.findOneAndDelete({user:req.user.userId})
+const logout = async (req, res) => {
+  await Token.findOneAndDelete({ user: req.user.userId });
+
+  // res.cookie("accessToken", "logout", {
+  //   httpOnly: true,
+  //   domain: "twenty-media.netlify.app",
+  //   expires: new Date(Date.now()),
+  // });
+
+  // res.cookie("refreshToken", "logout", {
+  //   httpOnly: true,
+  //   domain: "twenty-media.netlify.app",
+  //   expires: new Date(Date.now()),
+  // });
 
   res.cookie("accessToken", "logout", {
-    httpOnly: true,
-    domain: "twenty-media.netlify.app",
     expires: new Date(Date.now()),
   });
 
   res.cookie("refreshToken", "logout", {
-    httpOnly: true,
-    domain: "twenty-media.netlify.app",
     expires: new Date(Date.now()),
   });
 
@@ -176,7 +191,6 @@ const resetPassword = async (req, res) => {
       await user.save();
     }
   }
-
   res
     .status(StatusCodes.OK)
     .json({ msg: "Success! Redirecting to login page" });
@@ -189,4 +203,5 @@ module.exports = {
   verifyEmail,
   forgotPassword,
   resetPassword,
+  autoLogin,
 };
