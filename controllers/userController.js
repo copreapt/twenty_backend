@@ -12,9 +12,20 @@ const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 
 const getAllUsers = async (req, res) => {
-  const users = await User.find({ }).select("-password");
+  const users = await User.find({}).select("-password");
   res.status(StatusCodes.OK).json({ users: users });
 };
+
+const searchUsers = async (req,res) => {
+  const {search} = req.query;
+  if(!search){
+   return res.status(StatusCodes.OK).json({})
+  }
+  const result = await User.find({
+    fullName: { $regex: search, $options: "i" },
+  });
+  return res.status(StatusCodes.OK).json({ result });
+}
 
 const getSingleUser = async (req, res) => {
   const user = await User.findOne({ _id: req.params.id }).select("-password");
@@ -125,4 +136,5 @@ module.exports = {
   updateUserPassword,
   uploadImage,
   addFriend,
+  searchUsers,
 };

@@ -21,8 +21,8 @@ const register = async (req, res) => {
 
   // origin is the target url, where the user will navigate once the link in the email is clicked 
 
-  const origin = "https://twenty-media.netlify.app";
-  // const origin = "http://localhost:5173";
+  // const origin = "https://twenty-media.netlify.app";
+  const origin = "http://localhost:5173";
 
   await sendVerificationEmail({fullName: user.fullName, email: user.email, verificationToken: user.verificationToken, origin});
 
@@ -160,8 +160,8 @@ const forgotPassword = async (req,res) => {
   if(user){
     const passwordToken = crypto.randomBytes(70).toString('hex');
     // send email
-    const origin = "https://twenty-media.netlify.app";
-    // const origin = "http://localhost:5173";
+    // const origin = "https://twenty-media.netlify.app";
+    const origin = "http://localhost:5173";
     await sendResetPasswordEmail({fullName:user.fullName, email:user.email,token:passwordToken, origin})
 
     const tenMinutes = 1000 * 60 * 10;

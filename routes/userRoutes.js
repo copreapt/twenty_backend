@@ -10,12 +10,15 @@ const {
   updateUser,
   updateUserPassword,
   uploadImage,
-  addFriend
+  addFriend,
+  searchUsers
 } = require("../controllers/userController");
 
 router
   .route("/")
-  .get(authenticateUser,getAllUsers);
+  .get(authenticateUser,getAllUsers)
+
+router.route("/searchUsers").get(authenticateUser, searchUsers);
 
 router.route("/showMe").get(authenticateUser, showCurrentUser);
 
