@@ -21,8 +21,8 @@ const register = async (req, res) => {
 
   // origin is the target url, where the user will navigate once the link in the email is clicked 
 
-  // const origin = "https://twenty-media.netlify.app";
-  const origin = "http://localhost:5173";
+  const origin = "https://twenty-media.netlify.app";
+  // const origin = "http://localhost:5173";
 
   await sendVerificationEmail({fullName: user.fullName, email: user.email, verificationToken: user.verificationToken, origin});
 
@@ -106,9 +106,6 @@ const userToken = {refreshToken,ip,userAgent,user:user._id}
 
 await Token.create(userToken);
 
-
-
-
   attachCookiesToResponse({ res, user: tokenUser, refreshToken });
 
   res.status(StatusCodes.OK).json({ user: tokenUser});
@@ -125,25 +122,25 @@ const autoLogin = async (req,res) => {
 const logout = async (req, res) => {
   await Token.findOneAndDelete({ user: req.user.userId });
 
-  // res.cookie("accessToken", "logout", {
-  //   httpOnly: true,
-  //   domain: "twenty-media.netlify.app",
-  //   expires: new Date(Date.now()),
-  // });
-
-  // res.cookie("refreshToken", "logout", {
-  //   httpOnly: true,
-  //   domain: "twenty-media.netlify.app",
-  //   expires: new Date(Date.now()),
-  // });
-
   res.cookie("accessToken", "logout", {
+    httpOnly: true,
+    domain: "twenty-media.netlify.app",
     expires: new Date(Date.now()),
   });
 
   res.cookie("refreshToken", "logout", {
+    httpOnly: true,
+    domain: "twenty-media.netlify.app",
     expires: new Date(Date.now()),
   });
+
+  // res.cookie("accessToken", "logout", {
+  //   expires: new Date(Date.now()),
+  // });
+
+  // res.cookie("refreshToken", "logout", {
+  //   expires: new Date(Date.now()),
+  // });
 
   res.status(StatusCodes.OK).json({ msg: "Logged out" });
 };
@@ -160,8 +157,8 @@ const forgotPassword = async (req,res) => {
   if(user){
     const passwordToken = crypto.randomBytes(70).toString('hex');
     // send email
-    // const origin = "https://twenty-media.netlify.app";
-    const origin = "http://localhost:5173";
+    const origin = "https://twenty-media.netlify.app";
+    // const origin = "http://localhost:5173";
     await sendResetPasswordEmail({fullName:user.fullName, email:user.email,token:passwordToken, origin})
 
     const tenMinutes = 1000 * 60 * 10;

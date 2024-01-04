@@ -14,9 +14,7 @@ const {
   searchUsers
 } = require("../controllers/userController");
 
-router
-  .route("/")
-  .get(authenticateUser,getAllUsers)
+router.route("/").get(authenticateUser,getAllUsers)
 
 router.route("/searchUsers").get(authenticateUser, searchUsers);
 
