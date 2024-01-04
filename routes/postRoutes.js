@@ -17,7 +17,10 @@ const {
 router
   .route("/")
   .post(authenticateUser, createPost)
-  .get(getAllPosts);
+
+router
+  .route("/getAllPosts")
+  .post(getAllPosts);
 
 router
   .route("/uploadImage")

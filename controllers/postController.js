@@ -7,15 +7,21 @@ const fs = require("fs");
 
 
 const createPost = async (req, res) => {
-    // req.body.user = req.user.userId;
     req.body.user = req.user.userId;
     const post = await Post.create(req.body);
     res.status(StatusCodes.CREATED).json({post});
 };
 
 const getAllPosts= async (req, res) => {
-    const posts = await Post.find({}).sort({ createdAt: "desc" })
-    // let morePosts = await Post.find({}).sort({createdAt: "desc"}).skip(2).limit(1);
+    const { page, limit } = req.body;
+    console.log(page);
+    const pageNumber = Number(page) || 1;
+    const limitResult = Number(limit) || 4  ;
+    const skip = (pageNumber - 1) * limitResult;
+    const posts = await Post.find({}).sort({ createdAt: "desc" }).skip(skip).limit(limitResult);
+    if(posts.length < 1){
+    res.status(StatusCodes.OK).json({})
+    }
     res.status(StatusCodes.OK).json({posts});
 };
 
