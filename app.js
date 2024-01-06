@@ -19,6 +19,7 @@ const rateLimiter = require("express-rate-limit");
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const cors = require("cors");
+app.use(express.static("./public"));
 
 // database
 const connectDB = require('./db/connect');
