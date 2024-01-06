@@ -44,7 +44,6 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
     expires: new Date(Date.now() + longerExp),
     sameSite: "none",
     secure: true,
-    // secure: process.env.NODE_ENV === "production",
     signed: true,
     domain: "twenty-media.netlify.app",
   });
