@@ -63,7 +63,6 @@ const updateUser = async (req, res) => {
 
  const updatedUser = await User.findOne({ _id: req.user.userId });
 
-
  updatedUser.fullName = fullName;
  updatedUser.username = username;
  updatedUser.profilePicture = profilePicture;
@@ -91,6 +90,7 @@ const updateLikes = await Likes.updateMany({user: req.user.userId}, {
   attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({user: updatedUser, msg:"Profile updated!"});
 };
+
 const updateUserPassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   if (!oldPassword || !newPassword) {
