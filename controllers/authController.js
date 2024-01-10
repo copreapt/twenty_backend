@@ -122,25 +122,25 @@ const autoLogin = async (req,res) => {
 const logout = async (req, res) => {
   await Token.findOneAndDelete({ user: req.user.userId });
 
-  res.cookie("accessToken", "logout", {
-    httpOnly: true,
-    domain: "twenty-media.netlify.app",
-    expires: new Date(Date.now()),
-  });
-
-  res.cookie("refreshToken", "logout", {
-    httpOnly: true,
-    domain: "twenty-media.netlify.app",
-    expires: new Date(Date.now()),
-  });
-
   // res.cookie("accessToken", "logout", {
+  //   httpOnly: true,
+  //   domain: "twenty-media.netlify.app",
   //   expires: new Date(Date.now()),
   // });
 
   // res.cookie("refreshToken", "logout", {
+  //   httpOnly: true,
+  //   domain: "twenty-media.netlify.app",
   //   expires: new Date(Date.now()),
   // });
+
+  res.cookie("accessToken", "logout", {
+    expires: new Date(Date.now()),
+  });
+
+  res.cookie("refreshToken", "logout", {
+    expires: new Date(Date.now()),
+  });
 
   res.status(StatusCodes.OK).json({ msg: "Logged out" });
 };

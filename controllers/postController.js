@@ -14,13 +14,12 @@ const createPost = async (req, res) => {
 
 const getAllPosts= async (req, res) => {
     const { page, limit } = req.body;
-    console.log(page);
     const pageNumber = Number(page) || 1;
     const limitResult = Number(limit) || 4  ;
     const skip = (pageNumber - 1) * limitResult;
     const posts = await Post.find({}).sort({ createdAt: "desc" }).skip(skip).limit(limitResult);
     if(posts.length < 1){
-    res.status(StatusCodes.OK).json({})
+    return res.status(StatusCodes.OK).json({})
     }
     res.status(StatusCodes.OK).json({posts});
 };
