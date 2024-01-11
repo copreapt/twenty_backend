@@ -4,18 +4,18 @@ const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
 
 const createComment = async (req, res) => {
-   const { post: postId } = req.body;
-   const isValidPost = await Post.findOne({ _id: postId });
-   if (!isValidPost) {
-     throw new CustomError.NotFoundError(`No post with id: ${postId}`);
-   }
-   req.body.user = req.user.userId;
-   const comment = await Comments.create(req.body);
-   if(comment){
+  const { post: postId } = req.body;
+  const isValidPost = await Post.findOne({ _id: postId });
+  if (!isValidPost) {
+    throw new CustomError.NotFoundError(`No post with id: ${postId}`);
+  }
+  req.body.user = req.user.userId;
+  const comment = await Comments.create(req.body);
+  if(comment){
     const allComments = await Comments.find({post: postId})
     const currentUserCommentsToCurrentPost = await Comments.find({ post: postId, user: req.user.userId })
     return res.status(StatusCodes.CREATED).json({allComments, currentUserCommentsToCurrentPost});
-   }
+  }
 };
 
 const getComments = async (req, res) => {
@@ -32,7 +32,6 @@ const getLastComment = async (req,res) => {
 
 const updateComment = async (req,res) => {
     const { id: commentId } = req.params;
-
     const comment = await Comments.findOneAndUpdate(
       { _id: commentId },
       req.body,
@@ -41,7 +40,6 @@ const updateComment = async (req,res) => {
         runValidators: true,
       }
     );
-
     if (!comment) {
       throw new CustomError.NotFoundError(`No comment with id : ${commentId}`);
     }

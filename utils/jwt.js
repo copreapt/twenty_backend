@@ -5,7 +5,6 @@ const createJWT = ({ payload }) => {
   return token;
 };
 
-
 const isTokenValid = ( token ) => jwt.verify(token, process.env.JWT_SECRET);
 
 const attachCookiesToResponse = ({ res, user, refreshToken }) => {
@@ -17,36 +16,36 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
 
   // DEVELOPMENT
 
-  res.cookie("accessToken", accessTokenJWT, {
-    expires: new Date(Date.now() + oneDay),
-    signed: true,
-  });
+  // res.cookie("accessToken", accessTokenJWT, {
+  //   expires: new Date(Date.now() + oneDay),
+  //   signed: true,
+  // });
 
 
-  res.cookie("refreshToken", refreshTokenJWT, {
-    expires: new Date(Date.now() + longerExp),
-    signed:true,
-  });
+  // res.cookie("refreshToken", refreshTokenJWT, {
+  //   expires: new Date(Date.now() + longerExp),
+  //   signed:true,
+  // });
 
   // PRODUCTION
 
-  // res.cookie("accessToken", accessTokenJWT, {
-  //   httpOnly: true,
-  //   expires: new Date(Date.now() + oneDay),
-  //   sameSite: "none",
-  //   secure: true,
-  //   signed: true,
-  //   domain: "twenty-media.netlify.app",
-  // });
+  res.cookie("accessToken", accessTokenJWT, {
+    httpOnly: true,
+    expires: new Date(Date.now() + oneDay),
+    sameSite: "none",
+    secure: true,
+    signed: true,
+    domain: "twenty-media.netlify.app",
+  });
 
-  // res.cookie("refreshToken", refreshTokenJWT, {
-  //   httpOnly: true,
-  //   expires: new Date(Date.now() + longerExp),
-  //   sameSite: "none",
-  //   secure: true,
-  //   signed: true,
-  //   domain: "twenty-media.netlify.app",
-  // });
+  res.cookie("refreshToken", refreshTokenJWT, {
+    httpOnly: true,
+    expires: new Date(Date.now() + longerExp),
+    sameSite: "none",
+    secure: true,
+    signed: true,
+    domain: "twenty-media.netlify.app",
+  });
 
 };
 

@@ -19,7 +19,7 @@ const getAllUsers = async (req, res) => {
 const searchUsers = async (req,res) => {
   const {search} = req.query;
   if(!search){
-   return res.status(StatusCodes.OK).json({})
+    return res.status(StatusCodes.OK).json({})
   }
   const result = await User.find({
     fullName: { $regex: search, $options: "i" },
@@ -61,18 +61,18 @@ const updateUser = async (req, res) => {
     throw new CustomError.BadRequestError('Please provide all values')
   }
 
- const updatedUser = await User.findOne({ _id: req.user.userId });
+  const updatedUser = await User.findOne({ _id: req.user.userId });
 
- updatedUser.fullName = fullName;
- updatedUser.username = username;
- updatedUser.profilePicture = profilePicture;
- updatedUser.facebook = facebook;
- updatedUser.instagram = instagram;
- updatedUser.twitter = twitter;
- updatedUser.job = job;
- updatedUser.location = location;
+  updatedUser.fullName = fullName;
+  updatedUser.username = username;
+  updatedUser.profilePicture = profilePicture;
+  updatedUser.facebook = facebook;
+  updatedUser.instagram = instagram;
+  updatedUser.twitter = twitter;
+  updatedUser.job = job;
+  updatedUser.location = location;
 
- await updatedUser.save()
+  await updatedUser.save()
 
 //  find all the posts and comments of this user, and update full name and profile picture
 

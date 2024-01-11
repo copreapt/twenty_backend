@@ -56,16 +56,16 @@ const deletePost = async (req, res) => {
 
 const uploadImage = async (req, res) => {
     const result = await cloudinary.uploader.upload(
-      req.files.image.tempFilePath,
-      {
+    req.files.image.tempFilePath,
+    {
         use_filename: true,
         folder: "twenty",
-      }
+    }
     );
     fs.unlinkSync(req.files.image.tempFilePath);
     return res
-      .status(StatusCodes.OK)
-      .json({ image: { src: result.secure_url } });
+    .status(StatusCodes.OK)
+    .json({ image: { src: result.secure_url } });
 };
 
 const uploadVideo = async (req, res) => {

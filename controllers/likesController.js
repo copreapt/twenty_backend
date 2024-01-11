@@ -30,7 +30,7 @@ const createLike = async (req,res) => {
     const like = await Likes.create(req.body);
     if(like){
       const allLikes = await Likes.find({})
-     return res
+      return res
         .status(StatusCodes.CREATED)
         .json({ msg: "Success", allLikes });
     }

@@ -37,18 +37,18 @@ const errorHandlerMiddleware = require ('./middleware/error-handler.js');
 
 app.set("trust proxy", 1);
 app.use(helmet());
-// app.use(
-//   cors({
-//     origin: "https://twenty-media.netlify.app",
-//     credentials: true,
-//   })
-// );
 app.use(
   cors({
-    origin: true, //included origin as true
-    credentials: true, //included credentials as true
+    origin: "https://twenty-media.netlify.app",
+    credentials: true,
   })
 );
+// app.use(
+//   cors({
+//     origin: true, //included origin as true
+//     credentials: true, //included credentials as true
+//   })
+// );
 
 app.use(xss());
 app.use(mongoSanitize());
