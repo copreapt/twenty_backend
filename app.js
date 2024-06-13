@@ -5,17 +5,15 @@ require('express-async-errors');
 const express = require('express');
 const app = express();
 // rest of the packages
-const morgan = require('morgan');
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
-}); 
+});
 const fileUpload = require('express-fileupload');
 const mongoSanitize = require('express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
-const rateLimiter = require("express-rate-limit");
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const cors = require("cors");
@@ -37,18 +35,18 @@ const errorHandlerMiddleware = require ('./middleware/error-handler.js');
 
 app.set("trust proxy", 1);
 app.use(helmet());
-app.use(
-  cors({
-    origin: "https://twenty-media.netlify.app",
-    credentials: true,
-  })
-);
 // app.use(
 //   cors({
-//     origin: true, //included origin as true
-//     credentials: true, //included credentials as true
+//     origin: "https://twenty-media.netlify.app",
+//     credentials: true,
 //   })
 // );
+app.use(
+  cors({
+    origin: true, //included origin as true
+    credentials: true, //included credentials as true
+  })
+);
 
 app.use(xss());
 app.use(mongoSanitize());
